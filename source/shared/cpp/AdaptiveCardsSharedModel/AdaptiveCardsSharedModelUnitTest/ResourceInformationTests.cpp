@@ -230,25 +230,22 @@ namespace AdaptiveCardsSharedModelUnitTest
             class TestCustomParser : public BaseCardElementParser
             {
             public:
-                virtual std::shared_ptr<BaseCardElement> Deserialize(
-                    std::shared_ptr<AdaptiveCards::ElementParserRegistration> elementParserRegistration,
-                    std::shared_ptr<AdaptiveCards::ActionParserRegistration> actionParserRegistration,
-                    std::vector<std::shared_ptr<AdaptiveCards::AdaptiveCardParseWarning>>& warnings,
-                    const Json::Value& value) override
+
+                virtual std::shared_ptr<BaseCardElement> Deserialize(ParseContext &context, const Json::Value& value) override
                 {
                     return std::make_shared<TestCustomElement>(value);
                 }
+                virtual std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext &context, const std::string& value) override
+				{
+					return Deserialize(context, ParseUtil::GetJsonValueFromString(value));
+				}
             };
 
             // Define custom action parser
             class TestCustomActionParser : public ActionElementParser
             {
             public:
-                virtual std::shared_ptr<BaseActionElement> Deserialize(
-                    std::shared_ptr<AdaptiveCards::ElementParserRegistration> elementParserRegistration,
-                    std::shared_ptr<AdaptiveCards::ActionParserRegistration> actionParserRegistration,
-                    std::vector<std::shared_ptr<AdaptiveCards::AdaptiveCardParseWarning>>& warnings,
-                    const Json::Value& value) override
+                virtual std::shared_ptr<BaseActionElement> Deserialize(ParseContext &context, const Json::Value& value) override
                 {
                     return std::make_shared<TestCustomElement>(value);
                 }

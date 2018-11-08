@@ -6,6 +6,7 @@
 #include "TextBlock.h"
 #include "AdaptiveCardParseWarning.h"
 #include "SemanticVersion.h"
+#include "ParseContext.h"
 
 using namespace AdaptiveSharedNamespace;
 
@@ -65,6 +66,27 @@ std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string
     return AdaptiveCard::Deserialize(root, rendererVersion, elementParserRegistration, actionParserRegistration);
 }
 
+void AdaptiveCard::_ValidateLanguage(const std::string& language, std::vector<std::shared_ptr<AdaptiveCardParseWarning>>& warnings)
+{
+    try
+    {
+        if (language.empty() || language.length() == 2 || language.length() == 3)
+        {
+            auto locale = std::locale(language.c_str());
+        }
+        else
+        {
+            warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::InvalidLanguage,
+                                                                          "Invalid language identifier: " + language));
+        }
+    }
+    catch (std::runtime_error)
+    {
+        warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::InvalidLanguage,
+                                                                      "Invalid language identifier: " + language));
+    }
+}
+
 #ifdef __ANDROID__
 std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(
     const Json::Value& json,
@@ -85,7 +107,7 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
     // Verify this is an adaptive card
     ParseUtil::ExpectTypeString(json, CardElementType::AdaptiveCard);
 
-    std::vector<std::shared_ptr<AdaptiveCardParseWarning>> warnings;
+    ParseContext context(elementParserRegistration, actionParserRegistration);
 
     std::string version = ParseUtil::GetString(json, AdaptiveCardSchemaKey::Version, enforceVersion);
     std::string fallbackText = ParseUtil::GetString(json, AdaptiveCardSchemaKey::FallbackText);
@@ -93,24 +115,9 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
     std::string speak = ParseUtil::GetString(json, AdaptiveCardSchemaKey::Speak);
 
     // check if language is valid
-    try
-    {
-        if (language.empty() || language.length() == 2 || language.length() == 3)
-        {
-            auto locale = std::locale(language.c_str());
-        }
-        else
-        {
-            warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::InvalidLanguage,
-                                                                          "Invalid language identifier: " + language));
-        }
-    }
-    catch (std::runtime_error)
-    {
-        warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::InvalidLanguage,
-                                                                      "Invalid language identifier: " + language));
-    }
+    _ValidateLanguage(language, context.warnings);
 
+    // Perform version
     if (enforceVersion)
     {
         const SemanticVersion rendererMaxVersion(rendererVersion);
@@ -128,9 +135,9 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
                 speak = fallbackText;
             }
 
-            warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::UnsupportedSchemaVersion,
-                                                                          "Schema version not supported"));
-            return std::make_shared<ParseResult>(MakeFallbackTextCard(fallbackText, language, speak), warnings);
+            context.warnings.push_back(std::make_shared<AdaptiveCardParseWarning>(AdaptiveSharedNamespace::WarningStatusCode::UnsupportedSchemaVersion,
+                                                                                  "Schema version not supported"));
+            return std::make_shared<ParseResult>(MakeFallbackTextCard(fallbackText, language, speak), context.warnings);
         }
     }
 
@@ -147,21 +154,10 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
     HeightType height =
         ParseUtil::GetEnumValue<HeightType>(json, AdaptiveCardSchemaKey::Height, HeightType::Auto, HeightTypeFromString);
 
-    if (elementParserRegistration == nullptr)
-    {
-        elementParserRegistration = std::make_shared<ElementParserRegistration>();
-    }
-    if (actionParserRegistration == nullptr)
-    {
-        actionParserRegistration = std::make_shared<ActionParserRegistration>();
-    }
-
     // Parse body
-    auto body = ParseUtil::GetElementCollection(
-        elementParserRegistration, actionParserRegistration, warnings, json, AdaptiveCardSchemaKey::Body, false);
+    auto body = ParseUtil::GetElementCollection(context, json, AdaptiveCardSchemaKey::Body, false);
     // Parse actions if present
-    auto actions = ParseUtil::GetActionCollection(
-        elementParserRegistration, actionParserRegistration, warnings, json, AdaptiveCardSchemaKey::Actions, false);
+    auto actions = ParseUtil::GetActionCollection(context, json, AdaptiveCardSchemaKey::Actions, false);
 
     EnsureShowCardVersions(actions, version);
 
@@ -170,10 +166,9 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
     result->SetLanguage(language);
 
     // Parse optional selectAction
-    result->SetSelectAction(ParseUtil::GetAction(
-        elementParserRegistration, actionParserRegistration, warnings, json, AdaptiveCardSchemaKey::SelectAction, false));
+    result->SetSelectAction(ParseUtil::GetAction(context, json, AdaptiveCardSchemaKey::SelectAction, false));
 
-    return std::make_shared<ParseResult>(result, warnings);
+    return std::make_shared<ParseResult>(result, context.warnings);
 }
 
 #ifdef __ANDROID__

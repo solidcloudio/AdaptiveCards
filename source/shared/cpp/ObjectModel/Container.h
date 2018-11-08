@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Enums.h"
 #include "pch.h"
-#include "BaseActionElement.h"
+#include "Enums.h"
 #include "BaseCardElement.h"
-#include "ElementParserRegistration.h"
 
 namespace AdaptiveSharedNamespace
 {
+    class BaseActionElement;
+
     class Container : public BaseCardElement
     {
         friend class ContainerParser;
@@ -52,14 +52,7 @@ namespace AdaptiveSharedNamespace
         ContainerParser& operator=(ContainerParser&&) = default;
         virtual ~ContainerParser() = default;
 
-        std::shared_ptr<BaseCardElement> Deserialize(std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-                                                     std::shared_ptr<ActionParserRegistration> actionParserRegistration,
-                                                     std::vector<std::shared_ptr<AdaptiveCardParseWarning>>& warnings,
-                                                     const Json::Value& root) override;
-
-        std::shared_ptr<BaseCardElement> DeserializeFromString(std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-                                                               std::shared_ptr<ActionParserRegistration> actionParserRegistration,
-                                                               std::vector<std::shared_ptr<AdaptiveCardParseWarning>>& warnings,
-                                                               const std::string& jsonString);
+        std::shared_ptr<BaseCardElement> Deserialize(ParseContext& context, const Json::Value& root) override;
+        std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext& context, const std::string& jsonString) override;
     };
 }

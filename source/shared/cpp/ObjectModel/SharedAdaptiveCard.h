@@ -107,6 +107,8 @@ namespace AdaptiveSharedNamespace
         std::string Serialize() const;
 
     private:
+        static void _ValidateLanguage(const std::string& language, std::vector<std::shared_ptr<AdaptiveCardParseWarning>>& warnings);
+
         std::string m_version;
         std::string m_fallbackText;
         std::string m_backgroundImage;
