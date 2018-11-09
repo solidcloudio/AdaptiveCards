@@ -47,7 +47,7 @@ namespace AdaptiveSharedNamespace
         ChoiceSetInputParser(ChoiceSetInputParser&&) = default;
         ChoiceSetInputParser& operator=(const ChoiceSetInputParser&) = default;
         ChoiceSetInputParser& operator=(ChoiceSetInputParser&&) = default;
-        virtual ~ChoiceSetInputParser() = default;
+        ~ChoiceSetInputParser() = default;
 
         std::shared_ptr<BaseCardElement> Deserialize(ParseContext& context, const Json::Value& root) override;
         std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext& context, const std::string& jsonString) override;

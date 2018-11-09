@@ -358,7 +358,7 @@ namespace AdaptiveSharedNamespace
             auto element = parser->Deserialize(context, curJsonValue);
             if (element != nullptr)
             {
-                AddId(*element, context.elementIds);
+                AddId(*element, *(context.elementIds));
                 elements.push_back(element);
             }
         }
@@ -409,7 +409,7 @@ namespace AdaptiveSharedNamespace
             auto action = ParseUtil::GetActionFromJsonValue(context, curJsonValue);
             if (action != nullptr)
             {
-                AddId(*action, context.elementIds);
+                AddId(*action, *(context.elementIds));
                 elements.push_back(action);
             }
         }

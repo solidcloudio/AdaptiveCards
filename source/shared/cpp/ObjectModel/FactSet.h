@@ -37,7 +37,7 @@ namespace AdaptiveSharedNamespace
         FactSetParser(FactSetParser&&) = default;
         FactSetParser& operator=(const FactSetParser&) = default;
         FactSetParser& operator=(FactSetParser&&) = default;
-        virtual ~FactSetParser() = default;
+        ~FactSetParser() = default;
 
         std::shared_ptr<BaseCardElement> Deserialize(ParseContext& context, const Json::Value& root) override;
         std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext& context, const std::string& jsonString) override;

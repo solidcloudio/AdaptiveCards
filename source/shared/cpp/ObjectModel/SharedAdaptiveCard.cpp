@@ -46,16 +46,22 @@ AdaptiveCard::AdaptiveCard(std::string const& version,
 }
 
 #ifdef __ANDROID__
-std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(
-    const std::string& jsonFile,
-    std::string rendererVersion,
-    std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-    std::shared_ptr<ActionParserRegistration> actionParserRegistration) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string& jsonFile,
+                                                               std::string rendererVersion) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
 #else
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string& jsonFile, std::string rendererVersion)
+#endif // __ANDROID__
+{
+    ParseContext context;
+    return AdaptiveCard::DeserializeFromFile(jsonFile, rendererVersion, context);
+}
+
+#ifdef __ANDROID__
 std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string& jsonFile,
                                                                std::string rendererVersion,
-                                                               std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-                                                               std::shared_ptr<ActionParserRegistration> actionParserRegistration)
+                                                               ParseContext& context) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
+#else
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string& jsonFile, std::string rendererVersion, ParseContext& context)
 #endif // __ANDROID__
 {
     std::ifstream jsonFileStream(jsonFile);
@@ -63,7 +69,7 @@ std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromFile(const std::string
     Json::Value root;
     jsonFileStream >> root;
 
-    return AdaptiveCard::Deserialize(root, rendererVersion, elementParserRegistration, actionParserRegistration);
+    return AdaptiveCard::Deserialize(root, rendererVersion, context);
 }
 
 void AdaptiveCard::_ValidateLanguage(const std::string& language, std::vector<std::shared_ptr<AdaptiveCardParseWarning>>& warnings)
@@ -88,16 +94,11 @@ void AdaptiveCard::_ValidateLanguage(const std::string& language, std::vector<st
 }
 
 #ifdef __ANDROID__
-std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(
-    const Json::Value& json,
-    std::string rendererVersion,
-    std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-    std::shared_ptr<ActionParserRegistration> actionParserRegistration) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
-#else
 std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
                                                        std::string rendererVersion,
-                                                       std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-                                                       std::shared_ptr<ActionParserRegistration> actionParserRegistration)
+                                                       ParseContext& context) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
+#else
+std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json, std::string rendererVersion, ParseContext& context)
 #endif // __ANDROID__
 {
     ParseUtil::ThrowIfNotJsonObject(json);
@@ -106,8 +107,6 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
 
     // Verify this is an adaptive card
     ParseUtil::ExpectTypeString(json, CardElementType::AdaptiveCard);
-
-    ParseContext context(elementParserRegistration, actionParserRegistration);
 
     std::string version = ParseUtil::GetString(json, AdaptiveCardSchemaKey::Version, enforceVersion);
     std::string fallbackText = ParseUtil::GetString(json, AdaptiveCardSchemaKey::FallbackText);
@@ -172,19 +171,25 @@ std::shared_ptr<ParseResult> AdaptiveCard::Deserialize(const Json::Value& json,
 }
 
 #ifdef __ANDROID__
-std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromString(
-    const std::string& jsonString,
-    std::string rendererVersion,
-    std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-    std::shared_ptr<ActionParserRegistration> actionParserRegistration) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
-#else
 std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromString(const std::string& jsonString,
-                                                                 std::string rendererVersion,
-                                                                 std::shared_ptr<ElementParserRegistration> elementParserRegistration,
-                                                                 std::shared_ptr<ActionParserRegistration> actionParserRegistration)
+                                                                 std::string rendererVersion) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
+#else
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromString(const std::string& jsonString, std::string rendererVersion)
 #endif // __ANDROID__
 {
-    return AdaptiveCard::Deserialize(ParseUtil::GetJsonValueFromString(jsonString), rendererVersion, elementParserRegistration, actionParserRegistration);
+    ParseContext context;
+    return AdaptiveCard::DeserializeFromString(jsonString, rendererVersion, context);
+}
+
+#ifdef __ANDROID__
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromString(const std::string& jsonString,
+                                                                 std::string rendererVersion,
+                                                                 ParseContext& context) throw(AdaptiveSharedNamespace::AdaptiveCardParseException)
+#else
+std::shared_ptr<ParseResult> AdaptiveCard::DeserializeFromString(const std::string& jsonString, std::string rendererVersion, ParseContext& context)
+#endif // __ANDROID__
+{
+    return AdaptiveCard::Deserialize(ParseUtil::GetJsonValueFromString(jsonString), rendererVersion, context);
 }
 
 Json::Value AdaptiveCard::SerializeToJsonValue() const

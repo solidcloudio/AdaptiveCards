@@ -373,7 +373,9 @@ public class MainActivityAdaptiveCardsSample extends FragmentActivity
                 CardRendererRegistration.getInstance().registerOnlineMediaLoader(new OnlineMediaLoader());
             }
 
-            ParseResult parseResult = AdaptiveCard.DeserializeFromString(jsonText, AdaptiveCardRenderer.VERSION, elementParserRegistration);
+            ParseContext context = new ParseContext(elementParserRegistration, null);
+
+            ParseResult parseResult = AdaptiveCard.DeserializeFromString(jsonText, AdaptiveCardRenderer.VERSION, context);
             LinearLayout layout = (LinearLayout) findViewById(R.id.visualAdaptiveCardLayout);
             layout.removeAllViews();
             RenderedAdaptiveCard renderedCard = AdaptiveCardRenderer.getInstance().render(this, getSupportFragmentManager(), parseResult.GetAdaptiveCard(), this, hostConfig);

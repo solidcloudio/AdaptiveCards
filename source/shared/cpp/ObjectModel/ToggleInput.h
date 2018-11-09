@@ -43,7 +43,7 @@ namespace AdaptiveSharedNamespace
         ToggleInputParser(ToggleInputParser&&) = default;
         ToggleInputParser& operator=(const ToggleInputParser&) = default;
         ToggleInputParser& operator=(ToggleInputParser&&) = default;
-        virtual ~ToggleInputParser() = default;
+        ~ToggleInputParser() = default;
 
         std::shared_ptr<BaseCardElement> Deserialize(ParseContext& context, const Json::Value& root) override;
         std::shared_ptr<BaseCardElement> DeserializeFromString(ParseContext& context, const std::string& jsonString) override;
