@@ -800,5 +800,719 @@ namespace AdaptiveCards.Test
             Assert.AreEqual(1, image.AdditionalProperties.Count);
             Assert.AreEqual("cheetah", image.AdditionalProperties["test-image-prop"]);
         }
+
+        [TestMethod]
+        public void TestParseWeatherLargeCard()
+        {
+            //Default Large Weather Card from https://adaptivecards.io/samples/WeatherLarge.html
+            var payload =
+                @"{
+	                ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
+                    ""type"": ""AdaptiveCard"",
+	                ""version"": ""1.0"",
+	                ""speak"": ""<s>Weather forecast for Monday is high of 62 and low of 42 degrees with a 20% chance of rain</s><s>Winds will be 5 mph from the northeast</s>"",
+	                ""backgroundImage"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Background-Dark.jpg"",
+	                ""body"": [
+		                {
+			                ""type"": ""ColumnSet"",
+			                ""columns"": [
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""35"",
+					                ""items"": [
+						                {
+							                ""type"": ""Image"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png"",
+							                ""size"": ""stretch""
+                                        }
+					                ]
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""65"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""text"": ""Monday April 1"",
+							                ""weight"": ""bolder"",
+							                ""size"": ""large"",
+							                ""color"": ""light""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""text"": ""63 / 42"",
+							                ""size"": ""medium"",
+							                ""spacing"": ""none""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""isSubtle"": true,
+							                ""text"": ""20% chance of rain"",
+							                ""spacing"": ""none""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""isSubtle"": true,
+							                ""text"": ""Winds 5 mph NE"",
+							                ""spacing"": ""none""
+						                }
+					                ]
+				                }
+			                ]
+		                },
+		                {
+			                ""type"": ""ColumnSet"",
+			                ""columns"": [
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Fri""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""62""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""52"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Friday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Sat""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Drizzle-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""60""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""48"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Saturday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Sun""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""59""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""49"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Sunday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Mon""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""64""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""51"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Monday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                }
+			                ]
+		                }
+	                ]
+                }";
+
+            var result = AdaptiveCard.FromJson(payload);
+
+            // Expect no warnings
+            Assert.AreEqual(0, result.Warnings.Count);
+
+            // Check the card properties
+            var card = result.Card;
+            Assert.AreEqual("AdaptiveCard", card.Type);
+            Assert.AreEqual(1, card.Version.Major);
+            Assert.AreEqual(0, card.Version.Minor);
+
+            // No AdditionalProp
+            Assert.AreEqual(0, card.AdditionalProperties.Count);
+            //Assert.AreEqual("giraffe", card.AdditionalProperties["test-card-prop"]);
+
+            // Check the properties on the first image
+            var body = result.Card.Body;
+            Assert.AreEqual(2, body.Count);
+
+            var firstElement = body[0];
+            Assert.AreEqual("ColumnSet", firstElement.Type);
+
+           
+        }
+
+        [TestMethod]
+        public void TestParseWeatherLargeCardWithColumnIdsFromOnlineEditor()
+        {
+            //Default Large Weather Card from https://adaptivecards.io/samples/WeatherLarge.html
+            var payload =
+                @"{
+	                {
+                    ""type"": ""AdaptiveCard"",
+                    ""backgroundImage"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Background-Dark.jpg"",
+                    ""body"": [
+                        {
+                            ""type"": ""ColumnSet"",
+                            ""columns"": [
+                                {
+                                    ""type"": ""Column"",
+                                    ""id"": ""Col1"",
+                                    ""items"": [
+                                        {
+                                            ""type"": ""Image"",
+                                            ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png"",
+                                            ""size"": ""Stretch""
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 35,
+                                        ""unit"": 0
+                                    }
+                                },
+                                {
+                                    ""type"": ""Column"",
+                                    ""items"": [
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""size"": ""Large"",
+                                            ""weight"": ""Bolder"",
+                                            ""color"": ""Light"",
+                                            ""text"": ""Monday April 1""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""spacing"": ""None"",
+                                            ""size"": ""Medium"",
+                                            ""text"": ""63 / 42""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""20% chance of rain"",
+                                            ""isSubtle"": true
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""Winds 5 mph NE"",
+                                            ""isSubtle"": true
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 65,
+                                        ""unit"": 0
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            ""type"": ""ColumnSet"",
+                            ""columns"": [
+                                {
+                                    ""type"": ""Column"",
+                                    ""selectAction"": {
+                                        ""type"": ""Action.OpenUrl"",
+                                        ""title"": ""View Friday"",
+                                        ""url"": ""http://www.microsoft.com""
+                                    },
+                                    ""items"": [
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""Fri""
+                                        },
+                                        {
+                                            ""type"": ""Image"",
+                                            ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""62""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""52"",
+                                            ""isSubtle"": true
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 20,
+                                        ""unit"": 0
+                                    }
+                                },
+                                {
+                                    ""type"": ""Column"",
+                                    ""selectAction"": {
+                                        ""type"": ""Action.OpenUrl"",
+                                        ""title"": ""View Saturday"",
+                                        ""url"": ""http://www.microsoft.com""
+                                    },
+                                    ""items"": [
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""Sat""
+                                        },
+                                        {
+                                            ""type"": ""Image"",
+                                            ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Drizzle-Square.png""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""60""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""48"",
+                                            ""isSubtle"": true
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 20,
+                                        ""unit"": 0
+                                    }
+                                },
+                                {
+                                    ""type"": ""Column"",
+                                    ""selectAction"": {
+                                        ""type"": ""Action.OpenUrl"",
+                                        ""title"": ""View Sunday"",
+                                        ""url"": ""http://www.microsoft.com""
+                                    },
+                                    ""items"": [
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""Sun""
+                                        },
+                                        {
+                                            ""type"": ""Image"",
+                                            ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""59""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""49"",
+                                            ""isSubtle"": true
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 20,
+                                        ""unit"": 0
+                                    }
+                                },
+                                {
+                                    ""type"": ""Column"",
+                                    ""selectAction"": {
+                                        ""type"": ""Action.OpenUrl"",
+                                        ""title"": ""View Monday"",
+                                        ""url"": ""http://www.microsoft.com""
+                                    },
+                                    ""items"": [
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""Mon""
+                                        },
+                                        {
+                                            ""type"": ""Image"",
+                                            ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""text"": ""64""
+                                        },
+                                        {
+                                            ""type"": ""TextBlock"",
+                                            ""horizontalAlignment"": ""Center"",
+                                            ""spacing"": ""None"",
+                                            ""text"": ""51"",
+                                            ""isSubtle"": true
+                                        }
+                                    ],
+                                    ""width"": {
+                                        ""physicalSize"": 20,
+                                        ""unit"": 0
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
+                    ""version"": ""1.0"",
+                    ""speak"": ""Weather forecast for Monday is high of 62 and low of 42 degrees with a 20% chance of rainWinds will be 5 mph from the northeast""
+                }
+                }";
+
+            var result = AdaptiveCard.FromJson(payload);
+
+            // Expect no warnings
+            Assert.AreEqual(0, result.Warnings.Count);
+
+            // Check the card properties
+            var card = result.Card;
+            Assert.AreEqual("AdaptiveCard", card.Type);
+            Assert.AreEqual(1, card.Version.Major);
+            Assert.AreEqual(0, card.Version.Minor);
+
+            // No AdditionalProp
+            Assert.AreEqual(0, card.AdditionalProperties.Count);
+            //Assert.AreEqual("giraffe", card.AdditionalProperties["test-card-prop"]);
+
+            // Check the properties on the first image
+            var body = result.Card.Body;
+            Assert.AreEqual(2, body.Count);
+
+            var firstElement = body[0];
+            Assert.AreEqual("ColumnSet", firstElement.Type);
+
+
+        }
+
+        [TestMethod]
+        public void TestParseWeatherLargeCardAddIdManually()
+        {
+            //Default Large Weather Card from https://adaptivecards.io/samples/WeatherLarge.html
+            var payload =
+                @"{
+	                ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
+                    ""type"": ""AdaptiveCard"",
+	                ""version"": ""1.0"",
+	                ""speak"": ""<s>Weather forecast for Monday is high of 62 and low of 42 degrees with a 20% chance of rain</s><s>Winds will be 5 mph from the northeast</s>"",
+	                ""backgroundImage"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Background-Dark.jpg"",
+	                ""body"": [
+		                {
+			                ""type"": ""ColumnSet"",
+			                ""columns"": [
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""35"",
+                                    ""id"": ""Col1"",
+					                ""items"": [
+						                {
+							                ""type"": ""Image"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png"",
+							                ""size"": ""stretch""
+                                        }
+					                ]
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""65"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""text"": ""Monday April 1"",
+							                ""weight"": ""bolder"",
+							                ""size"": ""large"",
+							                ""color"": ""light""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""text"": ""63 / 42"",
+							                ""size"": ""medium"",
+							                ""spacing"": ""none""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""isSubtle"": true,
+							                ""text"": ""20% chance of rain"",
+							                ""spacing"": ""none""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""isSubtle"": true,
+							                ""text"": ""Winds 5 mph NE"",
+							                ""spacing"": ""none""
+						                }
+					                ]
+				                }
+			                ]
+		                },
+		                {
+			                ""type"": ""ColumnSet"",
+			                ""columns"": [
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Fri""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""62""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""52"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Friday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Sat""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Drizzle-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""60""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""48"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Saturday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Sun""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""59""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""49"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Sunday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                },
+				                {
+					                ""type"": ""Column"",
+					                ""width"": ""20"",
+					                ""items"": [
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""Mon""
+						                },
+						                {
+							                ""type"": ""Image"",
+							                ""size"": ""auto"",
+							                ""url"": ""http://messagecardplayground.azurewebsites.net/assets/Mostly%20Cloudy-Square.png""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""wrap"": false,
+							                ""text"": ""64""
+						                },
+						                {
+							                ""type"": ""TextBlock"",
+							                ""horizontalAlignment"": ""center"",
+							                ""isSubtle"": true,
+							                ""wrap"": false,
+							                ""text"": ""51"",
+							                ""spacing"": ""none""
+						                }
+					                ],
+					                ""selectAction"": {
+						                ""type"": ""Action.OpenUrl"",
+						                ""title"": ""View Monday"",
+						                ""url"": ""http://www.microsoft.com""
+					                }
+				                }
+			                ]
+		                }
+	                ]
+                }";
+
+            var result = AdaptiveCard.FromJson(payload);
+
+            // Expect no warnings
+            Assert.AreEqual(0, result.Warnings.Count);
+
+            // Check the card properties
+            var card = result.Card;
+            Assert.AreEqual("AdaptiveCard", card.Type);
+            Assert.AreEqual(1, card.Version.Major);
+            Assert.AreEqual(0, card.Version.Minor);
+
+            // No AdditionalProp
+            Assert.AreEqual(0, card.AdditionalProperties.Count);
+            //Assert.AreEqual("giraffe", card.AdditionalProperties["test-card-prop"]);
+
+            // Check the properties on the first image
+            var body = result.Card.Body;
+            Assert.AreEqual(2, body.Count);
+
+            var firstElement = body[0];
+            Assert.AreEqual("ColumnSet", firstElement.Type);
+
+
+        }
     }
 }
